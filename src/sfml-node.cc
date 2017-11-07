@@ -2,9 +2,11 @@
 
 #include "audio/music.h"
 #include "audio/sound.h"
+#include "graphics/font.h"
 #include "graphics/image.h"
 #include "graphics/renderwindow.h"
 #include "graphics/sprite.h"
+#include "graphics/text.h"
 #include "graphics/texture.h"
 #include "graphics/view.h"
 #include "system/clock.h"
@@ -19,9 +21,11 @@ void InitWindow(Napi::Env env, Napi::Object exports) {
 }
 
 void InitGraphics(Napi::Env env, Napi::Object exports) {
+    Font::Init(env, exports);
     Image::Init(env, exports);
     RenderWindow::Init(env, exports);
     Sprite::Init(env, exports);
+    Text::Init(env, exports);
     Texture::Init(env, exports);
     View::Init(env, exports);
 }
@@ -40,4 +44,4 @@ Napi::Object InitAll(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-NODE_API_MODULE(SfmlNode, InitAll)
+NODE_API_MODULE(SFMLnode, InitAll)

@@ -51,6 +51,8 @@ public:
     Napi::Value OutlineThickness_Get(const Napi::CallbackInfo& info);
     void OutlineThickness_Set(const Napi::CallbackInfo& info, const Napi::Value& value);
 
+    const sfText* GetText();
+
 private:
     sfText* _text;
 };

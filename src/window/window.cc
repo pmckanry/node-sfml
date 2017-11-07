@@ -1,5 +1,7 @@
 #include "window.h"
 
+#include "event.h"
+
 Napi::FunctionReference Window::constructor;
 
 void Window::Init(Napi::Env env, Napi::Object exports) {
@@ -111,15 +113,16 @@ Napi::Value Window::PollEvent(const Napi::CallbackInfo& info) {
     if(hasEvent == sfFalse) {
         return info.Env().Null();
     }
-    
-    // TODO
-    // Convert sfEvent into Napi::Object
-    return info.Env().Undefined();
+
+    return GetEventObject(info.Env(), event);
 }
 
 Napi::Value Window::WaitEvent(const Napi::CallbackInfo& info) {
-    // TODO
-    return info.Env().Undefined();
+    sfEvent event;
+
+    sfBool hasEvent = sfWindow_waitEvent(_window, &event);
+
+    return GetEventObject(info.Env(), event);
 }
 
 void Window::SetTitle(const Napi::CallbackInfo& info) {

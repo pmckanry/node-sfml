@@ -2,10 +2,32 @@
 
 #include "texture.h"
 
-Napi::FunctionReference Sprite::constuctor;
+Napi::FunctionReference Sprite::constructor;
 
 void Sprite::Init(Napi::Env env, Napi::Object exports) {
+    Napi::Function tpl = DefineClass(env, "Sprite", {
+        InstanceMethod("copy", &Sprite::Copy),
+        InstanceMethod("destroy", &Sprite::Destroy),
+        InstanceMethod("move", &Sprite::Move),
+        InstanceMethod("rotate", &Sprite::Rotate),
+        InstanceMethod("scaleTo", &Sprite::Scale),
+        InstanceMethod("getTransform", &Sprite::GetTransform),
+        InstanceMethod("getInverseTransform", &Sprite::GetInverseTransform),
+        InstanceMethod("getLocalBounds", &Sprite::GetLocalBounds),
+        InstanceMethod("getGlobalBounds", &Sprite::GetGlobalBounds),
+        InstanceAccessor("position", &Sprite::Position_Get, &Sprite::Position_Set),
+        InstanceAccessor("rotation", &Sprite::Rotation_Get, &Sprite::Rotation_Set),
+        InstanceAccessor("scale", &Sprite::Scale_Get, &Sprite::Scale_Set),
+        InstanceAccessor("origin", &Sprite::Origin_Get, &Sprite::Origin_Set),
+        InstanceAccessor("texture", &Sprite::Texture_Get, &Sprite::Texture_Set),
+        InstanceAccessor("textureRect", &Sprite::TextureRect_Get, &Sprite::TextureRect_Set),
+        InstanceAccessor("color", &Sprite::Color_Get, &Sprite::Color_Set)
+    });
 
+    constructor = Napi::Persistent(tpl);
+    constructor.SuppressDestruct();
+
+    exports.Set("Sprite", tpl);
 }
 
 Sprite::Sprite(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Sprite>(info) {
@@ -24,7 +46,7 @@ Napi::Value Sprite::Copy(const Napi::CallbackInfo& info) {
     sfSprite* sfmlSprite = sfSprite_copy(_sprite);
     Napi::External<sfSprite> externalSprite = Napi::External<sfSprite>::New(info.Env(), sfmlSprite);
 
-    return constuctor.New({ externalSprite });
+    return constructor.New({ externalSprite });
 }
 
 void Sprite::Destroy(const Napi::CallbackInfo& info) {

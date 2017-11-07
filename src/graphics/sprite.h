@@ -7,7 +7,7 @@
 class Sprite : public Napi::ObjectWrap<Sprite> {
 public:
 
-    static Napi::FunctionReference constuctor;
+    static Napi::FunctionReference constructor;
     static void Init(Napi::Env env, Napi::Object exports);
 
     Sprite(const Napi::CallbackInfo& info);

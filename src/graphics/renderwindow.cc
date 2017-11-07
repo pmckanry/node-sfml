@@ -2,6 +2,8 @@
 
 #include "view.h"
 #include "sprite.h"
+#include "text.h"
+#include "../window/event.h"
 
 Napi::FunctionReference RenderWindow::constructor;
 
@@ -134,14 +136,15 @@ Napi::Value RenderWindow::PollEvent(const Napi::CallbackInfo& info) {
         return info.Env().Null();
     }
     
-    // TODO
-    // Convert sfEvent into Napi::Object
-    return info.Env().Undefined();
+    return GetEventObject(info.Env(), event);
 }
 
 Napi::Value RenderWindow::WaitEvent(const Napi::CallbackInfo& info) {
-    // TODO
-    return info.Env().Undefined();
+    sfEvent event;
+    
+    sfBool hasEvent = sfRenderWindow_waitEvent(_renderWindow, &event);
+    
+    return GetEventObject(info.Env(), event);
 }
 
 void RenderWindow::SetTitle(const Napi::CallbackInfo& info) {
@@ -349,13 +352,20 @@ void RenderWindow::DrawSprite(const Napi::CallbackInfo& info) {
     if(info.Length() < 1) {
         throw Napi::Error::New(info.Env(), "Invalid number of arguments");
     }
+    
     Sprite* sprite = Sprite::Unwrap(info[0].As<Napi::Object>());
 
     sfRenderWindow_drawSprite(_renderWindow, sprite->GetSprite(), NULL);
 }
 
 void RenderWindow::DrawText(const Napi::CallbackInfo& info) {
-    // TODO
+    if(info.Length() < 1) {
+        throw Napi::Error::New(info.Env(), "Invalid number of arguments");
+    }
+
+    Text* text = Text::Unwrap(info[0].As<Napi::Object>());
+
+    sfRenderWindow_drawText(_renderWindow, text->GetText(), NULL);
 }
 
 void RenderWindow::DrawShape(const Napi::CallbackInfo& info) {
