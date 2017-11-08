@@ -3,7 +3,7 @@
         {
             "target_name": "sfml-node",
             "sources": [ 
-                "src/sfml-node.cc",
+                "src/node-sfml.cc",
                 "src/audio/music.cc",
                 "src/audio/sound.cc",
                 "src/audio/soundbuffer.cc",
